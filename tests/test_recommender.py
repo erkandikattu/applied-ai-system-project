@@ -1,4 +1,4 @@
-from src.recommender import Song, UserProfile, Recommender
+from src.recommender import Song, UserProfile, Recommender, score_song, recommend_songs
 
 def make_small_recommender() -> Recommender:
     songs = [
@@ -59,3 +59,57 @@ def test_explain_recommendation_returns_non_empty_string():
     explanation = rec.explain_recommendation(user, song)
     assert isinstance(explanation, str)
     assert explanation.strip() != ""
+
+
+def test_score_song_prefers_favorite_keys_over_fallback_keys():
+    song = {
+        "genre": "pop",
+        "mood": "happy",
+        "energy": 0.80,
+        "title": "Preference Clash",
+    }
+
+    user_prefs = {
+        "favorite_genre": "pop",
+        "genre": "rock",
+        "favorite_mood": "happy",
+        "mood": "intense",
+        "target_energy": 0.80,
+        "energy": 0.10,
+    }
+
+    score, reasons = score_song(user_prefs, song)
+
+    assert score == 5.0
+    assert "genre match (+2.0)" in reasons
+    assert "mood match (+1.0)" in reasons
+
+
+def test_score_song_out_of_range_target_energy_collapses_energy_points():
+    song = {
+        "genre": "pop",
+        "mood": "happy",
+        "energy": 0.82,
+        "title": "Sunrise City",
+    }
+
+    score, reasons = score_song(
+        {"favorite_genre": "vaportrap", "favorite_mood": "transcendental", "target_energy": 100.0},
+        song,
+    )
+
+    assert score == 0.0
+    assert "energy similarity (+0.00)" in reasons
+
+
+def test_recommend_songs_uses_title_for_last_tiebreak():
+    songs = [
+        {"title": "Zulu", "genre": "x", "mood": "y", "energy": 0.5},
+        {"title": "Alpha", "genre": "x", "mood": "y", "energy": 0.5},
+    ]
+    user_prefs = {"favorite_genre": "none", "favorite_mood": "none", "target_energy": 0.5}
+
+    results = recommend_songs(user_prefs, songs, k=2)
+
+    assert results[0][0]["title"] == "Alpha"
+    assert results[1][0]["title"] == "Zulu"

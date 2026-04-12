@@ -2,46 +2,22 @@
 
 ## Project Summary
 
-In this project you will build and explain a small music recommender system.
-
-Your goal is to:
-
-- Represent songs and a user "taste profile" as data
-- Design a scoring rule that turns that data into recommendations
-- Evaluate what your system gets right and wrong
-- Reflect on how this mirrors real world AI recommenders
-
-Replace this paragraph with your own summary of what your version does.
+This project implements a small content-based music recommender that ranks songs from a catalog using user preferences for genre, mood, and target energy. Songs earn points for genre and mood matches, plus similarity points based on how close song energy is to the user's target energy. Then, the system returns top recommendations with short explanations. I also tested multiple edge-case profiles to observe filter-bubble behavior and scoring limitations.
 
 ---
 
 ## How The System Works
 
-Explain your design in plain language.
-
 Real-world recommender systems combine collaborative and content-based filtering techniques to rank songs by a score, which measures relevance and interest to the user. My version will prioritize clarity and simplicity. The system should match the user's preferred genre and mood first and then filter based on numeric similarities (like energy and acousticness).
-
-Some prompts to answer:
-
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
 
 In my system, each Song should use features like id, title, artist, genre, mood, energy, acousticness. Optionally, the system can further filter/refine the recommendations by using valence, tempo_bpm, and danceability.
 
-- What information does your `UserProfile` store
-
 My UserProfile stores favorite genre, favorite mood, target energy (numeric energy value), and acoustic preferences (like or dislike).
-
-- How does your `Recommender` compute a score for each song
 
 The system adds points for songs that match the user's genre/mood preferences.
 The system adds similarity points for numeric features that are close to the user's target (e.g. energy distance). The combined weighted sum is the score for a song.
 
-- How do you choose which songs to recommend
-
 After scoring every song, sort the songs from highest to lowest score. Return the top 3 songs (or more than 3 if needed). An accompanying explanation of why the song was recommended could be included.
-
-You can include a simple diagram or bullet list if helpful.
 
 **Algorithm Recipe (Final)**:
   1. Genre match
@@ -72,9 +48,31 @@ You can include a simple diagram or bullet list if helpful.
 **Potential Biases (expected)**
 This system might over-prioritize genre since it assigns +2 points for matching genre compared to only +1 for matching mood. Therefore, songs with strong mood and energy scores may still rank lower if the genre does not match.
 
-
-
 ---
+## Sample Profile Music Recommendations
+![Music Recommendations Sample](recommendation_outputs/sample_music_recs_screenshot.png)
+
+## Diverse Profiles Music Recommendations
+![Out Of Range High Energy Sample Recommendation](recommendation_outputs/out_of_range_high_energy.png)
+
+![Out Of Range Negative Energy Sample Recommendation](recommendation_outputs/out_of_range_negative_energy.png)
+
+![Missing Core Preferences Sample Recommendation](recommendation_outputs/missing_core_preferences.png)
+
+![Conflicting Primary vs Fallback Keys Sample Recommendation](recommendation_outputs/conflicting_primary_vs_fallback_keys.png)
+
+![Fallback Only Keys Sample Recommendation](recommendation_outputs/fallback_only_keys.png)
+
+![Contradictory Mood vs Energy Sample Recommendation](recommendation_outputs/contradictory_mood_vs_energy.png)
+
+![Likes Acoustic Sample Recommendation](recommendation_outputs/likes_acoustic_but_ignored.png)
+
+![No Taxonomy Sample Recommendation](recommendation_outputs/nonexistent_taxonomy.png)
+
+![Lofi Chill Tie Sample Recommendation](recommendation_outputs/lofi_chill_tie_probe.png)
+
+![Empty Preferences Sample Recommendation](recommendation_outputs/empty_string_preferences.png)
+
 
 ## Getting Started
 
@@ -113,25 +111,13 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
-
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+First, I ran an experiment where I removed mood from the scoring algorithm. The result was that genre dominated the rankings with energy as a secondary factor if genre was not matching. Next, I ran an experiment where I switched the point values for mood and genre (originally genre: +2 and mood +1). The result was that the rankings prioritized mood more instead of genre. I also ran experiment for users that did not have any matching genre or mood to the songs in the dataset. The result was the system prioritized songs with similar energy levels.
 
 ---
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
-
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+The recommender currently only works on a small dataset songs.csv with only 18 songs. Therefore, it cannot support users with various preferences, especially niche preferences. Also, the recommender tends to favor matching genre over matching mood due to the scoring algorithm. Finally, the system does not factor other user preferences like acousticness or tempo_bpm into the scoring algorithm.
 
 ---
 
@@ -141,10 +127,9 @@ Read and complete `model_card.md`:
 
 [**Model Card**](model_card.md)
 
-Write 1 to 2 paragraphs here about what you learned:
+I learned about how recommender systems work. First, the system uses user profiles and preferences as input to the system. Then, the system compares the user preferences against a scoring algorithm and assigs a score to each song/data entry. The scoring algorithm can weight different preferences/factors differently, significantly affecting the rankings/recommendation. Finally, the system outputs a recommendation sorted from higher scores to lower scores. 
 
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
+These systems could have biases in dataset, scoring, and more. If the dataset is not large and diverse enough, the predictions could be heavily biased toward existing data. This means that users with niche or uncommon preferences will not get good predictions from the system. Additionally, if the scoring system weights certain preferences above others, users might get repetitive predictions. 
 
 
 ---
@@ -253,5 +238,3 @@ A few sentences about what you learned:
 - What surprised you about how your system behaved
 - How did building this change how you think about real music recommenders
 - Where do you think human judgment still matters, even if the model seems "smart"
-
-![Music Recommendations Sample](sample_music_recs_screeshot.png)
