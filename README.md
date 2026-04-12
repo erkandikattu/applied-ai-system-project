@@ -72,9 +72,8 @@ You can include a simple diagram or bullet list if helpful.
 **Potential Biases (expected)**
 This system might over-prioritize genre since it assigns +2 points for matching genre compared to only +1 for matching mood. Therefore, songs with strong mood and energy scores may still rank lower if the genre does not match.
 
-
-
 ---
+![Music Recommendations Sample](sample_music_recs_screeshot.png)
 
 ## Getting Started
 
@@ -253,5 +252,3 @@ A few sentences about what you learned:
 - What surprised you about how your system behaved
 - How did building this change how you think about real music recommenders
 - Where do you think human judgment still matters, even if the model seems "smart"
-
-![Music Recommendations Sample](sample_music_recs_screeshot.png)
