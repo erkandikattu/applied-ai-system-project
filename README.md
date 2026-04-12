@@ -48,31 +48,9 @@ After scoring every song, sort the songs from highest to lowest score. Return th
 **Potential Biases (expected)**
 This system might over-prioritize genre since it assigns +2 points for matching genre compared to only +1 for matching mood. Therefore, songs with strong mood and energy scores may still rank lower if the genre does not match.
 
+
+
 ---
-## Sample Profile Music Recommendations
-![Music Recommendations Sample](recommendation_outputs/sample_music_recs_screenshot.png)
-
-## Diverse Profiles Music Recommendations
-![Out Of Range High Energy Sample Recommendation](recommendation_outputs/out_of_range_high_energy.png)
-
-![Out Of Range Negative Energy Sample Recommendation](recommendation_outputs/out_of_range_negative_energy.png)
-
-![Missing Core Preferences Sample Recommendation](recommendation_outputs/missing_core_preferences.png)
-
-![Conflicting Primary vs Fallback Keys Sample Recommendation](recommendation_outputs/conflicting_primary_vs_fallback_keys.png)
-
-![Fallback Only Keys Sample Recommendation](recommendation_outputs/fallback_only_keys.png)
-
-![Contradictory Mood vs Energy Sample Recommendation](recommendation_outputs/contradictory_mood_vs_energy.png)
-
-![Likes Acoustic Sample Recommendation](recommendation_outputs/likes_acoustic_but_ignored.png)
-
-![No Taxonomy Sample Recommendation](recommendation_outputs/nonexistent_taxonomy.png)
-
-![Lofi Chill Tie Sample Recommendation](recommendation_outputs/lofi_chill_tie_probe.png)
-
-![Empty Preferences Sample Recommendation](recommendation_outputs/empty_string_preferences.png)
-
 
 ## Getting Started
 
