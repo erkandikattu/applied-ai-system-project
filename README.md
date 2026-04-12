@@ -19,15 +19,60 @@ Replace this paragraph with your own summary of what your version does.
 
 Explain your design in plain language.
 
+Real-world recommender systems combine collaborative and content-based filtering techniques to rank songs by a score, which measures relevance and interest to the user. My version will prioritize clarity and simplicity. The system should match the user's preferred genre and mood first and then filter based on numeric similarities (like energy and acousticness).
+
 Some prompts to answer:
 
 - What features does each `Song` use in your system
   - For example: genre, mood, energy, tempo
+
+In my system, each Song should use features like id, title, artist, genre, mood, energy, acousticness. Optionally, the system can further filter/refine the recommendations by using valence, tempo_bpm, and danceability.
+
 - What information does your `UserProfile` store
+
+My UserProfile stores favorite genre, favorite mood, target energy (numeric energy value), and acoustic preferences (like or dislike).
+
 - How does your `Recommender` compute a score for each song
+
+The system adds points for songs that match the user's genre/mood preferences.
+The system adds similarity points for numeric features that are close to the user's target (e.g. energy distance). The combined weighted sum is the score for a song.
+
 - How do you choose which songs to recommend
 
+After scoring every song, sort the songs from highest to lowest score. Return the top 3 songs (or more than 3 if needed). An accompanying explanation of why the song was recommended could be included.
+
 You can include a simple diagram or bullet list if helpful.
+
+**Algorithm Recipe (Final)**:
+  1. Genre match
+    - If song genre equals user favorite genre: add 2.0
+    - Else: add 0
+  2. Mood match
+    - If song mood equals user favorite mood: add 1.0
+    - Else: add 0
+  3. Energy similarity
+    - Compute distance: absolute value of (song_energy - user_target_energy)
+    - Convert to similarity: 1.0 - distance
+    - Clamp to [0, 1] just in case
+    - Add energy points: 2.0 × similarity
+  Total score:
+  Score = GenrePoints + MoodPoints + EnergyPoints
+
+  Range:
+
+  Minimum = 0.0
+  Maximum = 5.0
+  Normalized version: NormalizedScore = Score / 5.0
+
+  Tie-break rule (recommended)
+
+  If two songs have the same total score, rank the one with smaller energy distance first.
+  If still tied, sort alphabetically by title for deterministic output.
+
+**Potential Biases (expected)**
+This system might over-prioritize genre since it assigns +2 points for matching genre compared to only +1 for matching mood. Therefore, songs with strong mood and energy scores may still rank lower if the genre does not match.
+
+
 
 ---
 
@@ -209,3 +254,4 @@ A few sentences about what you learned:
 - How did building this change how you think about real music recommenders
 - Where do you think human judgment still matters, even if the model seems "smart"
 
+![Music Recommendations Sample](sample_music_recs_screeshot.png)
