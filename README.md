@@ -159,4 +159,4 @@ This project taught me about how to implement recommender systems efficiently. A
 This project has given me a foundation for understanding how recommendation systems balance simplicity, accuracy, and fairness. Going forward, I'd prioritize expanding the dataset, adding fuzzy/similarity matching for genres/moods, and implementing user feedback mechanisms to improve recommendations over time.
 
 ## Demo Video
-[![Watch demo video](assets/demo_screenshot.png)](https://drive.google.com/file/d/1jhUG4pgAI1tIrRYnAd0J0yIO96Zdau8n/preview)
+[![Watch demo video](assets/demo_screenshot.png)](https://app.screencastify.com/watch/go6e7pknDUFXgwIA2cnX?checkOrg=26480630-5835-40d6-8e01-7e7b138b5813)
