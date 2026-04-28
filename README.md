@@ -22,6 +22,11 @@ The system operates through three main stages:
 
 The system includes built-in validation to detect and log issues with invalid preferences or missing song data, ensuring robust handling of edge cases.
 
+## System Architecture Diagram
+
+![System Architecture Diagram](assets/system_architecture_diagram.png)
+
+
 ## Setup Instructions
 
 ### Prerequisites
@@ -158,5 +163,5 @@ This project taught me about how to implement recommender systems efficiently. A
 
 This project has given me a foundation for understanding how recommendation systems balance simplicity, accuracy, and fairness. Going forward, I'd prioritize expanding the dataset, adding fuzzy/similarity matching for genres/moods, and implementing user feedback mechanisms to improve recommendations over time.
 
-## Demo Video
+## Demo Video (Click to Watch Project Demo)
 [![Watch demo video](assets/demo_screenshot.png)](https://app.screencastify.com/watch/go6e7pknDUFXgwIA2cnX?checkOrg=26480630-5835-40d6-8e01-7e7b138b5813)
