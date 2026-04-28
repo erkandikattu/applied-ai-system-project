@@ -10,7 +10,13 @@ You will implement the functions in recommender.py:
 """
 
 import argparse
-from recommender import load_songs, recommend_songs
+import logging
+
+from recommender import load_songs, recommend_songs, run_reliability_checks
+
+
+logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(name)s:%(message)s")
+logger = logging.getLogger(__name__)
 
 
 ADVERSARIAL_PROFILES = [
@@ -89,6 +95,23 @@ def run_adversarial_profiles(songs, k: int) -> None:
         )
 
 
+def run_evaluation(songs, k: int) -> None:
+    results = run_reliability_checks(ADVERSARIAL_PROFILES, songs, k=k)
+    passed = sum(1 for result in results if result.get("passed"))
+    failed = len(results) - passed
+
+    print("\nEVALUATION SUMMARY")
+    print("=" * 50)
+    for result in results:
+        status = "PASS" if result.get("passed") else "FAIL"
+        extra = f" ({result['error']})" if "error" in result else f" [{result.get('count', 0)} recs]"
+        print(f"{status}: {result['name']}{extra}")
+    print(f"Passed: {passed} | Failed: {failed}")
+
+    if failed:
+        logger.warning("Evaluation completed with %s failing profile(s)", failed)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run the music recommender simulation.")
     parser.add_argument(
@@ -96,33 +119,36 @@ def main() -> None:
         action="store_true",
         help="Run a suite of adversarial/edge-case user profiles.",
     )
+    parser.add_argument(
+        "--evaluate",
+        action="store_true",
+        help="Run reliability checks against the adversarial profiles.",
+    )
     parser.add_argument("--k", type=int, default=5, help="Number of recommendations to return.")
     args = parser.parse_args()
 
     songs = load_songs("data/songs.csv")
 
     # Starter example profile
-    user_prefs = {"genre": "pop", "mood": "happy", "energy": 0.8}
-
-    taste_profile = {
-        "favorite_genre": "lofi",
-        "favorite_mood": "chill",
-        "target_energy": 0.45,
-        "likes_acoustic": True,
-        "target_tempo_bpm": 84,
-        "target_danceability": 0.58,
-        "genre_weight": 0.35,
-        "mood_weight": 0.25,
-        "energy_weight": 0.25,
-        "acousticness_weight": 0.15,
-    }
+    user_prefs1 = {"genre": "pop", "mood": "happy", "energy": 0.8}
+    user_prefs2 = {"genre": "rock", "mood": "angry", "energy": 0.9}
+    user_prefs3 = {"genre": "lofi", "mood": "chill", "energy": 0.3}
 
     if args.adversarial:
         run_adversarial_profiles(songs, k=args.k)
         return
 
-    recommendations = recommend_songs(user_prefs, songs, k=args.k)
-    print_recommendations("TOP MUSIC RECOMMENDATIONS", recommendations)
+    if args.evaluate:
+        run_evaluation(songs, k=args.k)
+        return
+
+    recommendations1 = recommend_songs(user_prefs1, songs, k=args.k)
+    recommendations2 = recommend_songs(user_prefs2, songs, k=args.k)
+    recommendations3 = recommend_songs(user_prefs3, songs, k=args.k)
+
+    print_recommendations("User 1 MUSIC RECOMMENDATIONS", recommendations1)
+    print_recommendations("User 2 MUSIC RECOMMENDATIONS", recommendations2)
+    print_recommendations("User 3 MUSIC RECOMMENDATIONS", recommendations3)
 
 
 if __name__ == "__main__":

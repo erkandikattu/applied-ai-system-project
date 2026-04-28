@@ -57,3 +57,22 @@ I would add more songs to the songs.csv dataset to support more niche user prefe
 ## 9. Personal Reflection  
 
 I learned that recommender systems are more simple than I previously thought. The user provides preferences which the system scores each song based on. Then the ranked songs are returned for the user. I found the scoring algorithm creation very interesting since the rankings changed a lot depending on which factors were weighted differently. I now know that music recommendation apps are more simple than I thought, but still have much more versatility and complexity than my simple recommendation system.
+
+# Project Reflection
+
+**Limitations and Biases**
+
+The current recommender system has a small dataset with a more simple scoring algorithm. The system does not consider user preferences other than genre, mood, and target energy while scoring songs. This leads to poor recommendations for users with no matches for genre, mood, and target energy in the dataset. Additionally, the small dataset lacks song diversity and will cause the system to have poor performance for users with niche preferences. Also, the system uses exact-matching and does not consider related preferences (e.g, melancholy instead of sad for mood). This may lead to users getting poor recommendations even though their preferences should match songs in the dataset. Finally, the scoring algorithm gives more weight to genre rather than mood, so the system can over-prioritize genre-matches rather than other preferences.
+
+**Misuse of AI System and How to Prevent It**
+Since the current system is simple and deterministic, a user could assume it to have higher accuracy that it really does. It could reinforce the same set of songs despite other songs being good matches as well. I would prevent this issue by clearly documenting the system's limitations and advising the user to read the explanations for each song recommendation clearly. 
+
+**Surprises While Testing AI's Reliability**
+I was surprised by how much the reliability tests exposed the dependence on dataset quality and preference considerations. The scoring algorithms simple nature was exposed by reliability tests with users with niche preferences. Additionally, the edge cases from the adversarial test suite showed the need for robust input validation and error handling. The reliability tests showed how important dataset quality, edge case testing, and consistent outputs are to a recommendation system.
+
+**Collaboration With AI**
+I used Copilot for help choosing which AI feature to implement. Once I chose a feature (Reliability/Testing system), I used Ask and Plan mode to brainstorm the implementation of the feature. Once I was satisfied with the planning, I used Agent mode to execute the plan and complete the implementation into the relevant files. At the same time, I asked Copilot to provide the Mermaid diagram representing the flow of the app with the AI feature. Finally, I asked AI to provide pytest tests to ensure the functionality is correct.
+
+One example of AI providing a helpful suggestion was using Copilot in Ask mode to figure out which AI feature makes sense to implement for the recommender system. I was not sure which feature to implement and extend the existing project with and Copilot's explanations of the pros and cons of each feature were really helpful.
+
+An example of a flawed AI response was its struggle to correctly explain the system diagram conceptually and, therefore, in the Mermaid diagram. I noticed that it was not giving enough detail for the system diagram. After some clarifications and prompting, the AI system correctly generate the proper Mermaid diagram.
